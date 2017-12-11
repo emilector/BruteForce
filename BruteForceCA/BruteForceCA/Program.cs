@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO.Compression;
 
 namespace Bruteforce
 {
@@ -9,34 +10,24 @@ namespace Bruteforce
                         'q','r','s','t','u','v','w','x','y','z','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P',
                         'Q','R','S','T','U','V', 'W', 'X','Y','Z','!','?', '.', ' ','*','-','+', '_'};
 
-        static string FindPassword;
-        static int Combi;
-        static string space;
-        static int Characters;
+        static int m_Combi;
+        static DateTime m_startTime;
 
         static void Main(string[] args)
         {
-            System.Diagnostics.Process.Start("C:/Users/Messelken/Desktop/test.7z/test/teest.txt");
-
             Console.Title = "Brute Force";
 
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("ALL FILES LOADED...");
-            Console.WriteLine(space);
             Console.WriteLine("Enter file location:");
             Console.ForegroundColor = ConsoleColor.White;
 
-            space = " ";
             int Count;
 
-            FindPassword = (Console.ReadLine());
-            Characters = FindPassword.Length;
+            string path = Console.ReadLine();
+
             Console.Clear();
 
             DateTime today = DateTime.Now;
-            today.ToString("yyyy-MM-dd_HH:mm:ss");
-            Console.WriteLine(space);
-            Console.WriteLine("START:\t{0}", today);
+            m_startTime = today;
 
             for (Count = 0; Count <= 15; Count++)
             {
@@ -50,26 +41,59 @@ namespace Bruteforce
 
             for (Count = 0; Count < Match.Length; Count++)
             {
-                Combi++;
+                m_Combi++;
+                Console.WriteLine(BaseString + Match[Count]);
+
                 if (Position < Lenght - 1)
                 {
                     Recurse(Lenght, Position + 1, BaseString + Match[Count]);
                 }
-                if (BaseString + Match[Count] == FindPassword)
+                if ("h1r" == BaseString + Match[Count])
                 {
-                    Console.WriteLine();
-                    Console.ForegroundColor = ConsoleColor.Blue;
-                    Console.WriteLine("Your password is: " + FindPassword);
-                    Console.WriteLine("Your password is: " + Characters + " character(s) long");
-                    Console.ForegroundColor = ConsoleColor.White;
-                    DateTime today = DateTime.Now;
-                    today.ToString("yyyy-MM-dd_HH:mm:ss");
-                    Console.WriteLine(space);
-                    Console.WriteLine("END:\t{0}\nCombi:\t{1}", today, Combi);
-                    Console.ReadLine();
-                    Environment.Exit(0);
+                    string password = BaseString + Match[Count];
+                    passwordFound(password);
                 }
             }
         }
+
+        private static void passwordFound(string password)
+        {
+            Console.WriteLine();
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("HACK COMPLETE");
+            Console.WriteLine();
+            Console.Write("Seeked password: ");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine(password);
+            Console.ForegroundColor = ConsoleColor.White;
+            DateTime today = DateTime.Now;
+            today.ToString("yyyy-MM-dd_HH:mm:ss");
+            var delta = today - m_startTime;
+            Console.WriteLine();
+            Console.WriteLine("Tested:\t{0} Combinations\nInit:\t{1}\nDone:\t{2}\n", m_Combi, m_startTime, today);
+            Console.ReadLine();
+            Environment.Exit(0);
+        }
+
+        /*static bool openZip(string password)
+        {
+            try
+            {
+                using (ZipFile archive = new ZipFile(@"c:\path\to\your\password\protected\archive.zip",))
+                {
+                    archive.Password = password;
+                    archive.Encryption = EncryptionAlgorithm.PkzipWeak; // the default: you might need to select the proper value here
+                    archive.StatusMessageTextWriter = Console.Out;
+
+                    archive.ExtractAll(@"c:\path\to\unzip\directory\", ExtractExistingFileAction.Throw);
+                }
+
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }*/
     }
 }
