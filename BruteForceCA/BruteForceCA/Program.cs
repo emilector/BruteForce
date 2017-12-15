@@ -12,22 +12,22 @@ namespace Bruteforce
 
         static int m_Combi;
         static DateTime m_startTime;
+        static bool visionActivated = true;
 
         static void Main(string[] args)
         {
             Console.Title = "Brute Force";
-
-            Console.WriteLine("Enter file location:");
             Console.ForegroundColor = ConsoleColor.White;
 
-            int Count;
-
-            string path = Console.ReadLine();
-
-            Console.Clear();
+            Console.Write("Start Attack?");
+            Console.ReadLine();
 
             DateTime today = DateTime.Now;
             m_startTime = today;
+
+            Console.WriteLine("\nStarting Hack: " + m_startTime + "\n----------------------------------");
+
+            int Count;
 
             for (Count = 0; Count <= 15; Count++)
             {
@@ -42,13 +42,21 @@ namespace Bruteforce
             for (Count = 0; Count < Match.Length; Count++)
             {
                 m_Combi++;
-                Console.WriteLine(BaseString + Match[Count]);
+
+                if (visionActivated)
+                {
+                    Console.Write(BaseString + Match[Count] + "    [ ");
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.Write("Checking...");
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.WriteLine(" ]");
+                }
 
                 if (Position < Lenght - 1)
                 {
                     Recurse(Lenght, Position + 1, BaseString + Match[Count]);
                 }
-                if ("h1r" == BaseString + Match[Count])
+                if ("@s3Pss" == BaseString + Match[Count])
                 {
                     string password = BaseString + Match[Count];
                     passwordFound(password);
